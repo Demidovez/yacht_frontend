@@ -69,6 +69,7 @@
 <script>
 import axios from "axios";
 import { mapMutations } from "vuex";
+import { baseUrlName } from "../../config";
 export default {
   data() {
     return {
@@ -95,7 +96,7 @@ export default {
     prune(resource) {
       this.isLoading = true;
       axios({
-        url: "/api/settings/prune/" + resource,
+        url: baseUrlName + "/api/settings/prune/" + resource,
         method: "GET",
         responseType: "text/json"
       })

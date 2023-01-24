@@ -31,6 +31,7 @@
 <script>
 import axios from "axios";
 import { mapMutations, mapActions, mapState } from "vuex";
+import { baseUrlName } from "../../config";
 export default {
   data() {
     return {
@@ -56,7 +57,7 @@ export default {
     checkUpdate() {
       this.isLoading = true;
       axios({
-        url: "/api/settings/check/update",
+        url: baseUrlName + "/api/settings/check/update",
         method: "GET",
         responseType: "text/json"
       })
@@ -72,7 +73,7 @@ export default {
     update() {
       this.isLoading = true;
       axios({
-        url: "/api/settings/update",
+        url: baseUrlName + "/api/settings/update",
         method: "GET",
         responseType: "text/json"
       })

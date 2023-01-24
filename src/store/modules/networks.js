@@ -1,9 +1,10 @@
 import axios from "axios";
 import router from "@/router/index";
+import { baseUrlName } from "../../config";
 
 const state = {
   networks: [],
-  isLoading: false
+  isLoading: false,
 };
 
 const mutations = {
@@ -11,7 +12,7 @@ const mutations = {
     state.networks = networks;
   },
   setNetwork(state, network) {
-    const idx = state.networks.findIndex(x => x.Id === network.Id);
+    const idx = state.networks.findIndex((x) => x.Id === network.Id);
     if (idx < 0) {
       state.networks.push(network);
     } else {
@@ -22,7 +23,7 @@ const mutations = {
     state.networks.push(network);
   },
   removeNetwork(state, network) {
-    const idx = state.networks.findIndex(x => x.Id === network.Id);
+    const idx = state.networks.findIndex((x) => x.Id === network.Id);
     if (idx < 0) {
       return;
     }
@@ -30,17 +31,17 @@ const mutations = {
   },
   setLoading(state, loading) {
     state.isLoading = loading;
-  }
+  },
 };
 
 const actions = {
   _readNetworks({ commit }) {
-    const url = "/api/resources/networks/";
+    const url = baseUrlName + "/api/resources/networks/";
     commit("setLoading", true);
     return new Promise((resolve, reject) => {
       axios
         .get(url)
-        .then(response => {
+        .then((response) => {
           const networks = response.data;
           commit("setLoading", false);
           commit("setNetworks", networks);
@@ -49,7 +50,7 @@ const actions = {
         .finally(() => {
           commit("setLoading", false);
         })
-        .catch(error => {
+        .catch((error) => {
           commit("snackbar/setErr", error, { root: true });
           reject(error);
         });
@@ -57,15 +58,15 @@ const actions = {
   },
   readNetworks({ commit }) {
     commit("setLoading", true);
-    const url = "/api/resources/networks/";
+    const url = baseUrlName + "/api/resources/networks/";
     axios
       .get(url)
-      .then(response => {
+      .then((response) => {
         console.log(response);
         const networks = response.data;
         commit("setNetworks", networks);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -74,14 +75,14 @@ const actions = {
   },
   readNetwork({ commit }, id) {
     commit("setLoading", true);
-    const url = `/api/resources/networks/${id}`;
+    const url = `${baseUrlName}/api/resources/networks/${id}`;
     axios
       .get(url)
-      .then(response => {
+      .then((response) => {
         const network = response.data;
         commit("setNetwork", network);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -90,14 +91,14 @@ const actions = {
   },
   writeNetwork({ commit }, payload) {
     commit("setLoading", true);
-    const url = "/api/resources/networks/";
+    const url = baseUrlName + "/api/resources/networks/";
     axios
       .post(url, payload)
-      .then(response => {
+      .then((response) => {
         const networks = response.data;
         commit("setNetworks", networks);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -123,27 +124,27 @@ const actions = {
   //   },
   deleteNetwork({ commit }, id) {
     commit("setLoading", true);
-    const url = `/api/resources/networks/${id}`;
+    const url = `${baseUrlName}/api/resources/networks/${id}`;
     axios
       .delete(url)
-      .then(response => {
+      .then((response) => {
         const network = response.data;
         commit("removeNetwork", network);
         commit("setLoading", false);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
         commit("setLoading", false);
       });
-  }
+  },
 };
 
 const getters = {
   getNetworkById(state) {
-    return Id => {
-      return state.networks.find(x => x.Id == Id);
+    return (Id) => {
+      return state.networks.find((x) => x.Id == Id);
     };
-  }
+  },
 };
 
 export default {
@@ -151,5 +152,5 @@ export default {
   state,
   mutations,
   getters,
-  actions
+  actions,
 };

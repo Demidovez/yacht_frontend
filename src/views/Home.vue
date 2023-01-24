@@ -65,6 +65,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import { baseUrlName } from "../config";
 export default {
   data() {
     return {
@@ -89,7 +90,7 @@ export default {
     },
     readAppStats() {
         this.statConnection = new EventSource(
-          `/api/apps/stats`
+          `${baseUrlName}/api/apps/stats`
         );
         this.statConnection.addEventListener("update", event => {
           let statsGroup = JSON.parse(event.data);

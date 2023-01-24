@@ -1,4 +1,5 @@
 import axios from "axios";
+import { baseUrlName } from "../../config";
 
 const state = {
   apps: [],
@@ -7,7 +8,7 @@ const state = {
   processes: [],
   isLoading: false,
   isLoadingValue: null,
-  action: ""
+  action: "",
 };
 
 const mutations = {
@@ -15,7 +16,7 @@ const mutations = {
     state.apps = apps;
   },
   setApp(state, app) {
-    const idx = state.apps.findIndex(x => x.Name === app.Name);
+    const idx = state.apps.findIndex((x) => x.Name === app.Name);
     if (idx < 0) {
       state.apps.push(app);
     } else {
@@ -51,21 +52,21 @@ const mutations = {
   setUpdated(state, updated) {
     let index = state.updatable.indexOf(updated);
     state.updatable.splice(index, 1);
-  }
+  },
 };
 
 const actions = {
   async readApps({ commit }) {
     await commit("setLoading", true);
     await commit("setAction", "Getting Apps ...");
-    const url = "/api/apps/";
+    const url = baseUrlName + "/api/apps/";
     await axios
       .get(url)
-      .then(response => {
+      .then((response) => {
         var apps = response.data;
         commit("setApps", apps);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -104,17 +105,17 @@ const actions = {
     await commit("setLoadingItems");
     await commit("setAction", "Checking for updates...");
     await Promise.all(
-      apps.map(async _app => {
-        let url = `/api/apps/${_app.name}/updates`;
+      apps.map(async (_app) => {
+        let url = `${baseUrlName}/api/apps/${_app.name}/updates`;
         await axios
           .get(url)
-          .then(response => {
+          .then((response) => {
             let app = response.data;
             commit("setLoadingItemCompleted", apps.length);
             commit("setApp", app);
             commit("setLoading", true);
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
             commit("snackbar/setErr", err, { root: true });
           });
@@ -125,25 +126,25 @@ const actions = {
     });
   },
   readApp({ commit }, Name) {
-    const url = `/api/apps/${Name}`;
+    const url = `${baseUrlName}/api/apps/${Name}`;
     commit("setLoading", true);
     return new Promise((resolve, reject) => {
       axios
         .get(url)
-        .then(response => {
+        .then((response) => {
           const app = response.data;
           commit("setLoading", false);
           commit("setApp", app);
           resolve(app);
         })
-        .catch(err => {
+        .catch((err) => {
           commit("snackbar/setErr", err, { root: true });
           reject(err);
         });
     });
   },
   async readAppProcesses({ commit }, Name) {
-    const url = `/api/apps/${Name}/processes`;
+    const url = `${baseUrlName}/api/apps/${Name}/processes`;
     let response = await axios.get(url);
     if (response) {
       const processes = response.data;
@@ -151,33 +152,33 @@ const actions = {
     }
   },
   async readAppLogs({ commit }, Name) {
-    let url = `/api/apps/${Name}/logs`;
+    let url = `${baseUrlName}/api/apps/${Name}/logs`;
     axios
       .get(url)
-      .then(response => {
+      .then((response) => {
         let logs = [];
         let _log = response.data.logs;
         let split_log = _log.split("\n");
-        split_log.forEach(element => {
+        split_log.forEach((element) => {
           logs.push(element);
         });
         commit("setAppLogs", logs);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       });
   },
   AppUpdate({ commit }, Name) {
     commit("setLoading", true);
     commit("setAction", "Updating " + Name + " ...");
-    const url = `/api/apps/${Name}/update`;
+    const url = `${baseUrlName}/api/apps/${Name}/update`;
     axios
       .get(url)
-      .then(response => {
+      .then((response) => {
         const app = response.data;
         commit("setApps", app);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -189,14 +190,14 @@ const actions = {
   AppAction({ commit }, { Name, Action }) {
     commit("setLoading", true);
     commit("setAction", Action + " " + Name + " ...");
-    const url = `/api/apps/actions/${Name}/${Action}`;
+    const url = `${baseUrlName}/api/apps/actions/${Name}/${Action}`;
     axios
       .get(url)
-      .then(response => {
+      .then((response) => {
         const app = response.data;
         commit("setApps", app);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -206,16 +207,16 @@ const actions = {
         commit("setLoading", false);
         commit("setAction", "");
       });
-  }
+  },
 };
 
 const getters = {
   getAppByName(state) {
-    return Name => {
+    return (Name) => {
       Name = "/" + Name;
-      return state.apps.find(x => x.Name == Name);
+      return state.apps.find((x) => x.Name == Name);
     };
-  }
+  },
 };
 
 export default {
@@ -223,5 +224,5 @@ export default {
   state,
   mutations,
   getters,
-  actions
+  actions,
 };

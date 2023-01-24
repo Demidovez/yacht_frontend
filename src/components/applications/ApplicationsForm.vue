@@ -798,6 +798,7 @@
 import axios from "axios";
 import { mapActions, mapMutations, mapState } from "vuex";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
+import { baseUrlName } from "../../config";
 
 export default {
   components: {
@@ -1010,7 +1011,7 @@ export default {
     submitFormData() {
       const payload = { ...this.form };
       this.isLoading = true;
-      const url = `/api/apps/deploy`;
+      const url = `${baseUrlName}/api/apps/deploy`;
       axios
         .post(url, payload)
         .then(() => {

@@ -496,7 +496,7 @@
         project</v-card-text
       >
       <v-btn
-        :href="`/api/compose/${project.name}/support`"
+        :href="`${baseUrlName}/api/compose/${project.name}/support`"
         target="_blank"
         class="mb-2 ml-2"
         color="primary"
@@ -534,6 +534,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
+import { baseUrlName } from "../../config";
 
 export default {
   data() {

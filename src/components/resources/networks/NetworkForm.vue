@@ -203,6 +203,7 @@
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import axios from "axios";
 import { mapMutations } from "vuex";
+import { baseUrlName } from "../../../config";
 
 export default {
   components: {
@@ -268,7 +269,7 @@ export default {
     submit() {
       const payload = { ...this.form };
       this.isLoading = true;
-      const url = `/api/resources/networks/`;
+      const url = `${baseUrlName}/api/resources/networks/`;
       axios
         .post(url, payload)
         .then(() => {

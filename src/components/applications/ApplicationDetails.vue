@@ -53,7 +53,7 @@
                       color="secondary"
                       v-bind="attrs"
                       v-on="on"
-                      :href="`/api/apps/${app.name}/support`"
+                      :href="`${baseUrlName}/api/apps/${app.name}/support`"
                       target="_blank"
                       download
                       class="mx-1 my-1 hidden-sm-and-down"
@@ -118,7 +118,7 @@
                       <v-list-item-title>Edit</v-list-item-title>
                     </v-list-item>
                     <v-list-item
-                      :href="`/api/apps/${app.name}/support`"
+                      :href="`${baseUrlName}/api/apps/${app.name}/support`"
                       target="_blank"
                       color="primary"
                       download
@@ -350,6 +350,7 @@ import AppProcesses from "./ApplicationDetailsComponents/AppProcesses";
 import AppContent from "./ApplicationDetailsComponents/AppContent";
 import AppLogs from "./ApplicationDetailsComponents/AppLogs";
 import { mapActions, mapGetters, mapState } from "vuex";
+import { baseUrlName } from "../../config";
 export default {
   components: {
     Content: AppContent,
@@ -405,13 +406,13 @@ export default {
       this.$router.push({ name: "View Applications" });
     },
     readAppLogs(appName) {
-      this.logConnection = new EventSource(`/api/apps/${appName}/logs`);
+      this.logConnection = new EventSource(`${baseUrlName}/api/apps/${appName}/logs`);
       this.logConnection.addEventListener("update", event => {
         this.logs.push(event.data);
       });
     },
     readAppStats(appName) {
-      this.statConnection = new EventSource(`/api/apps/${appName}/stats`);
+      this.statConnection = new EventSource(`${baseUrlName}/api/apps/${appName}/stats`);
       this.statConnection.addEventListener("update", event => {
         let statsGroup = JSON.parse(event.data);
         this.stats.time.push(statsGroup.time);

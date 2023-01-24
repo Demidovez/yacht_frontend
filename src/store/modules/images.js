@@ -1,9 +1,10 @@
 import axios from "axios";
 import router from "@/router/index";
+import { baseUrlName } from "../../config";
 
 const state = {
   images: [],
-  isLoading: false
+  isLoading: false,
 };
 
 const mutations = {
@@ -11,7 +12,7 @@ const mutations = {
     state.images = images;
   },
   setImage(state, image) {
-    const idx = state.images.findIndex(x => x.Id === image.Id);
+    const idx = state.images.findIndex((x) => x.Id === image.Id);
     if (idx < 0) {
       state.images.push(image);
     } else {
@@ -22,7 +23,7 @@ const mutations = {
     state.images.push(image);
   },
   removeImage(state, image) {
-    const idx = state.images.findIndex(x => x.Id === image.Id);
+    const idx = state.images.findIndex((x) => x.Id === image.Id);
     if (idx < 0) {
       return;
     }
@@ -30,20 +31,20 @@ const mutations = {
   },
   setLoading(state, loading) {
     state.isLoading = loading;
-  }
+  },
 };
 
 const actions = {
   readImages({ commit }) {
     commit("setLoading", true);
-    const url = "/api/resources/images/";
+    const url = baseUrlName + "/api/resources/images/";
     axios
       .get(url)
-      .then(response => {
+      .then((response) => {
         const images = response.data;
         commit("setImages", images);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -52,14 +53,14 @@ const actions = {
   },
   readImage({ commit }, id) {
     commit("setLoading", true);
-    const url = `/api/resources/images/${id}`;
+    const url = `${baseUrlName}/api/resources/images/${id}`;
     axios
       .get(url)
-      .then(response => {
+      .then((response) => {
         const image = response.data;
         commit("setImage", image);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -68,14 +69,14 @@ const actions = {
   },
   writeImage({ commit }, payload) {
     commit("setLoading", true);
-    const url = "/api/resources/images/";
+    const url = baseUrlName + "/api/resources/images/";
     axios
       .post(url, payload)
-      .then(response => {
+      .then((response) => {
         const images = response.data;
         commit("setImages", images);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -85,15 +86,15 @@ const actions = {
   },
   updateImage({ commit, dispatch }, id) {
     commit("setLoading", true);
-    const url = `/api/resources/images/${id}/pull`;
+    const url = `${baseUrlName}/api/resources/images/${id}/pull`;
     axios
       .get(url)
-      .then(response => {
+      .then((response) => {
         const image = response.data;
         commit("setImage", image);
         dispatch("readImages");
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -102,28 +103,28 @@ const actions = {
   },
   deleteImage({ commit }, id) {
     commit("setLoading", true);
-    const url = `/api/resources/images/${id}`;
+    const url = `${baseUrlName}/api/resources/images/${id}`;
     axios
       .delete(url)
-      .then(response => {
+      .then((response) => {
         const image = response.data;
         commit("removeImage", image);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
         commit("setLoading", false);
       });
-  }
+  },
 };
 
 const getters = {
   getImageById(state) {
-    return Id => {
-      return state.images.find(x => x.Id == Id);
+    return (Id) => {
+      return state.images.find((x) => x.Id == Id);
     };
-  }
+  },
 };
 
 export default {
@@ -131,5 +132,5 @@ export default {
   state,
   mutations,
   getters,
-  actions
+  actions,
 };

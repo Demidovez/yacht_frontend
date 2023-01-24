@@ -3,7 +3,7 @@ import router from "@/router/index";
 
 const state = {
   volumes: [],
-  isLoading: false
+  isLoading: false,
 };
 
 const mutations = {
@@ -11,7 +11,7 @@ const mutations = {
     state.volumes = volumes;
   },
   setVolume(state, volume) {
-    const idx = state.volumes.findIndex(x => x.Name === volume.Name);
+    const idx = state.volumes.findIndex((x) => x.Name === volume.Name);
     if (idx < 0) {
       state.volumes.push(volume);
     } else {
@@ -22,7 +22,7 @@ const mutations = {
     state.volumes.push(volume);
   },
   removeVolume(state, volume) {
-    const idx = state.volumes.findIndex(x => x.Name === volume.Name);
+    const idx = state.volumes.findIndex((x) => x.Name === volume.Name);
     if (idx < 0) {
       return;
     }
@@ -30,17 +30,17 @@ const mutations = {
   },
   setLoading(state, loading) {
     state.isLoading = loading;
-  }
+  },
 };
 
 const actions = {
   _readVolumes({ commit }) {
-    const url = "/api/resources/volumes/";
+    const url = baseUrlName + "/api/resources/volumes/";
     commit("setLoading", true);
     return new Promise((resolve, reject) => {
       axios
         .get(url)
-        .then(response => {
+        .then((response) => {
           const volumes = response.data;
           commit("setLoading", false);
           commit("setVolumes", volumes);
@@ -49,7 +49,7 @@ const actions = {
         .finally(() => {
           commit("setLoading", false);
         })
-        .catch(error => {
+        .catch((error) => {
           commit("snackbar/setErr", error, { root: true });
           reject(error);
         });
@@ -57,14 +57,14 @@ const actions = {
   },
   readVolumes({ commit }) {
     commit("setLoading", true);
-    const url = "/api/resources/volumes/";
+    const url = baseUrlName + "/api/resources/volumes/";
     axios
       .get(url)
-      .then(response => {
+      .then((response) => {
         const volumes = response.data;
         commit("setVolumes", volumes);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -73,14 +73,14 @@ const actions = {
   },
   readVolume({ commit }, id) {
     commit("setLoading", true);
-    const url = `/api/resources/volumes/${id}`;
+    const url = `${baseUrlName}/api/resources/volumes/${id}`;
     axios
       .get(url)
-      .then(response => {
+      .then((response) => {
         const volume = response.data;
         commit("setVolume", volume);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -89,14 +89,14 @@ const actions = {
   },
   writeVolume({ commit }, payload) {
     commit("setLoading", true);
-    const url = "/api/resources/volumes/";
+    const url = baseUrlName + "/api/resources/volumes/";
     axios
       .post(url, payload)
-      .then(response => {
+      .then((response) => {
         const volumes = response.data;
         commit("setVolumes", volumes);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -106,14 +106,14 @@ const actions = {
   },
   updateVolume({ commit }, id) {
     commit("setLoading", true);
-    const url = `/api/resources/volumes/${id}/pull`;
+    const url = `${baseUrlName}/api/resources/volumes/${id}/pull`;
     axios
       .get(url)
-      .then(response => {
+      .then((response) => {
         const volume = response.data;
         commit("setVolume", volume);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
@@ -122,28 +122,28 @@ const actions = {
   },
   deleteVolume({ commit }, id) {
     commit("setLoading", true);
-    const url = `/api/resources/volumes/${id}`;
+    const url = `${baseUrlName}/api/resources/volumes/${id}`;
     axios
       .delete(url)
-      .then(response => {
+      .then((response) => {
         const volume = response.data;
         commit("removeVolume", volume);
       })
-      .catch(err => {
+      .catch((err) => {
         commit("snackbar/setErr", err, { root: true });
       })
       .finally(() => {
         commit("setLoading", false);
       });
-  }
+  },
 };
 
 const getters = {
   getVolumeByName(state) {
-    return Name => {
-      return state.volumes.find(x => x.Name == Name);
+    return (Name) => {
+      return state.volumes.find((x) => x.Name == Name);
     };
-  }
+  },
 };
 
 export default {
@@ -151,5 +151,5 @@ export default {
   state,
   mutations,
   getters,
-  actions
+  actions,
 };

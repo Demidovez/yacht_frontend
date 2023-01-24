@@ -54,6 +54,7 @@
 <script>
 import { mapActions, mapMutations } from "vuex";
 import axios from "axios";
+import { baseUrlName } from "../../config";
 export default {
   data() {
     return {
@@ -89,7 +90,7 @@ export default {
       }
     },
     submitCompose() {
-      let url = `/api/compose/${this.form.name}/edit`;
+      let url = `${baseUrlName}/api/compose/${this.form.name}/edit`;
       axios
         .post(url, this.form, {})
         .then(response => {

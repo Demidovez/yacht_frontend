@@ -6,7 +6,7 @@ module.exports = {
 
   devServer: {
     proxy: {
-      "/api": {
+      "/api11": {
         target: "http://localhost:8000",
         timeout: 6000,
         ws: true,

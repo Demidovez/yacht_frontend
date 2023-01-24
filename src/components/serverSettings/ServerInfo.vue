@@ -45,6 +45,7 @@
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import axios from "axios";
 import { mapMutations } from "vuex";
+import { baseUrlName } from "../../config";
 export default {
   components: {
     ValidationObserver,
@@ -62,7 +63,7 @@ export default {
     }),
     export_settings() {
       axios({
-        url: "/api/settings/export",
+        url: baseUrlName + "/api/settings/export",
         method: "GET",
         responseType: "blob"
       }).then(response => {
@@ -85,7 +86,7 @@ export default {
         }
       };
       axios
-        .post("/api/settings/export", formData, axiosHeader)
+        .post(baseUrlName + "/api/settings/export", formData, axiosHeader)
         .then(response => {
           this.setSuccess(response);
         })
