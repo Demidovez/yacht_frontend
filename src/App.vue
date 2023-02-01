@@ -3,7 +3,6 @@
     <div v-if="isLoggedIn">
       <Sidebar v-if="$vuetify.breakpoint.mdAndUp" />
       <Bottombar v-if="$vuetify.breakpoint.smAndDown" />
-      <Appbar />
       <v-main>
         <!-- Provides the application the proper gutter -->
         <v-container fluid>
@@ -36,7 +35,6 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import Sidebar from "./components/nav/Sidebar";
-import Appbar from "./components/nav/Appbar";
 import Bottombar from "./components/nav/Bottombar";
 import LoginForm from "./components/auth/LoginForm";
 import snackbar from "./components/notifications/snackbar";
@@ -45,7 +43,6 @@ export default {
 
   components: {
     Sidebar: Sidebar,
-    Appbar: Appbar,
     Bottombar: Bottombar,
     LoginForm: LoginForm,
     snackbar: snackbar

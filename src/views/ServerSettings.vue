@@ -33,6 +33,34 @@
                   <v-icon left class="mr-1">mdi-update</v-icon>
                   Update
                 </v-tab>
+                <v-tab class="text-left">
+                  <v-menu bottom offset-y v-if="!authDisabled">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn color="primary" v-bind="attrs" v-on="on" class="pr-2">
+                        {{ username }}
+                        <v-icon> mdi-chevron-down </v-icon>
+                      </v-btn>
+                    </template>
+                    <v-list color="foreground">
+                      <v-list-item :to="{ path: `/user/info` }">
+                        <v-list-item-icon>
+                          <v-icon>mdi-account-settings-outline</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          User
+                        </v-list-item-content>
+                      </v-list-item>
+                      <v-list-item @click="logout()">
+                        <v-list-item-icon>
+                          <v-icon>mdi-logout-variant</v-icon>
+                        </v-list-item-icon>
+                        <v-list-item-content>
+                          Logout
+                        </v-list-item-content>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
+                </v-tab>
               </v-tabs>
               <transition
                 name="slide"
@@ -69,6 +97,7 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
 import Info from "../components/serverSettings/ServerInfo";
 import Variables from "../components/serverSettings/ServerVariables";
 import Theme from "../components/serverSettings/Theme";
@@ -87,6 +116,14 @@ export default {
       SettingsTab: 1,
       version: process.env.VUE_APP_VERSION || "unreleased"
     };
+  },
+  methods: {
+    ...mapActions({
+      logout: "auth/AUTH_LOGOUT"
+    }),
+  },
+  computed: {
+    ...mapState("auth", ["username", "authDisabled"])
   }
 };
 </script>
