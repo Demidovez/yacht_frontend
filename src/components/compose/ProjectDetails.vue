@@ -313,15 +313,29 @@
                     {{ project.services[service].read_only }}
                   </v-list-item-content>
                 </v-list-item>
-                <v-list-item v-if="project.services[service].networks && Array.isArray(project.services[service].networks)">
+                <v-list-item
+                  v-if="
+                    project.services[service].networks &&
+                      Array.isArray(project.services[service].networks)
+                  "
+                >
                   <v-list-item-content> Networks </v-list-item-content>
                   <v-list-item-content>
                     {{ project.services[service].networks.join(", ") }}
                   </v-list-item-content>
                 </v-list-item>
-                <v-list-item v-else-if="project.services[service].networks && typeof project.services[service].networks === 'object'">
+                <v-list-item
+                  v-else-if="
+                    project.services[service].networks &&
+                      typeof project.services[service].networks === 'object'
+                  "
+                >
                   <v-list-item-content> Networks </v-list-item-content>
-                  <v-list-item-content v-for="(content, network) in project.services[service].networks" :key="network">
+                  <v-list-item-content
+                    v-for="(content, network) in project.services[service]
+                      .networks"
+                    :key="network"
+                  >
                     {{ network }}, {{ content[Object.keys(content)[0]] }}
                   </v-list-item-content>
                 </v-list-item>
@@ -496,7 +510,7 @@
         project</v-card-text
       >
       <v-btn
-        :href="`${baseUrlName}/api/compose/${project.name}/support`"
+        :href="`/api/compose/${project.name}/support`"
         target="_blank"
         class="mb-2 ml-2"
         color="primary"
@@ -534,7 +548,6 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import { baseUrlName } from "../../config";
 
 export default {
   data() {

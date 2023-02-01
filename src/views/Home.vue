@@ -70,12 +70,12 @@ export default {
   data() {
     return {
       stats: {},
-      statConnection: {}
+      statConnection: {},
     };
   },
   methods: {
     ...mapActions({
-      readApps: "apps/readApps"
+      readApps: "apps/readApps",
     }),
     formatBytes(bytes, decimals = 2) {
       if (bytes === 0) return "0 Bytes";
@@ -89,38 +89,34 @@ export default {
       return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
     },
     readAppStats() {
-        this.statConnection = new EventSource(
-          `${baseUrlName}/api/apps/stats`
+      this.statConnection = new EventSource(`${baseUrlName}/api/apps/stats`);
+      this.statConnection.addEventListener("update", event => {
+        let statsGroup = JSON.parse(event.data);
+        if (!(statsGroup.name in this.stats)) {
+          this.stats[statsGroup.name] = {};
+          this.stats[statsGroup.name].name = statsGroup.name;
+        }
+        this.stats[statsGroup.name].cpu_percent = Math.round(
+          statsGroup.cpu_percent
         );
-        this.statConnection.addEventListener("update", event => {
-          let statsGroup = JSON.parse(event.data);
-          if (!(statsGroup.name in this.stats)) {
-            this.stats[statsGroup.name] = {};
-            this.stats[statsGroup.name].name = statsGroup.name;
-          }
-          this.stats[statsGroup.name].cpu_percent = Math.round(
-            statsGroup.cpu_percent
-          );
-          this.stats[statsGroup.name].mem_percent = Math.round(
-            statsGroup.mem_percent
-          );
-          this.stats[statsGroup.name].mem_current = this.formatBytes(
-            statsGroup.mem_current,
-            2
-          );
-          this.stats[statsGroup.name].mem_total = this.formatBytes(
-            statsGroup.mem_total,
-            2
-          );
-          this.$forceUpdate();
-        });
+        this.stats[statsGroup.name].mem_percent = Math.round(
+          statsGroup.mem_percent
+        );
+        this.stats[statsGroup.name].mem_current = this.formatBytes(
+          statsGroup.mem_current,
+          2
+        );
+        this.stats[statsGroup.name].mem_total = this.formatBytes(
+          statsGroup.mem_total,
+          2
+        );
+        this.$forceUpdate();
+      });
     },
     refresh() {
       this.closeStats();
       this.readApps();
-      for (var app in this.apps) {
-        this.readAppStats(this.apps[app].name);
-      }
+      this.readAppStats();
     },
     sortByTitle(arr) {
       let sorted = Object.keys(arr)
@@ -128,7 +124,7 @@ export default {
         .reduce(
           (acc, key) => ({
             ...acc,
-            [key]: arr[key]
+            [key]: arr[key],
           }),
           {}
         );
@@ -148,30 +144,28 @@ export default {
           {
             label: "CPU Usage",
             backgroundColor: "#41b883",
-            data: app.cpu_percent
+            data: app.cpu_percent,
           },
           {
             label: "Mem Usage",
             backgroundColor: "#008bcf",
-            data: app.mem_percent
-          }
-        ]
+            data: app.mem_percent,
+          },
+        ],
       };
       return datacollection;
-    }
+    },
   },
   computed: {
-    ...mapState("apps", ["apps"])
+    ...mapState("apps", ["apps"]),
   },
   async created() {
     await this.readApps();
-    for (var app in this.apps) {
-      this.readAppStats(this.apps[app].name);
-    }
+    this.readAppStats();
   },
   beforeDestroy() {
     this.closeStats();
-  }
+  },
 };
 </script>
 

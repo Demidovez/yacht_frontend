@@ -861,7 +861,10 @@ export default {
   },
   calculated: {
     ...mapState("networks", ["networks"]),
-    ...mapState("volumes", ["volumes"])
+    ...mapState("volumes", ["volumes"]),
+    baseUrlName() {
+      return baseUrlName;
+    }
   },
   methods: {
     ...mapActions({

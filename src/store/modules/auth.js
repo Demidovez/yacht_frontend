@@ -74,7 +74,6 @@ const actions = {
               router.push({ path: "/" });
               resolve(resp);
             });
-
           resolve(resp);
         })
         .catch((error) => {

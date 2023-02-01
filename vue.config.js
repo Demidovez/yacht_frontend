@@ -3,11 +3,12 @@ module.exports = {
   transpileDependencies: ["vuetify"],
   filenameHashing: false,
   productionSourceMap: false,
+  chainWebpack: (config) => config.optimization.minimize(false),
 
   devServer: {
     proxy: {
-      "/api11": {
-        target: "http://localhost:8000",
+      "/api": {
+        target: "http://127.0.0.1:8000",
         timeout: 6000,
         ws: true,
         changeOrigin: true,

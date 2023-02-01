@@ -86,7 +86,7 @@ export default {
         }
       };
       axios
-        .post(baseUrlName + "/api/settings/export", formData, axiosHeader)
+      .post(baseUrlName + "/api/settings/export", formData, axiosHeader)
         .then(response => {
           this.setSuccess(response);
         })

@@ -40,7 +40,7 @@
               :class="{
                 'mx-4 primary': $vuetify.breakpoint.smAndDown,
                 'ml-4 primary flex-shrink-1 flex-grow-0':
-                  $vuetify.breakpoint.mdAndUp
+                  $vuetify.breakpoint.mdAndUp,
               }"
             >
               <v-card-title>
@@ -118,7 +118,7 @@
                       <v-list-item-title>Edit</v-list-item-title>
                     </v-list-item>
                     <v-list-item
-                      :href="`${baseUrlName}/api/apps/${app.name}/support`"
+                    :href="`${baseUrlName}/api/apps/${app.name}/support`"
                       target="_blank"
                       color="primary"
                       download
@@ -222,7 +222,7 @@
             <v-card
               :class="{
                 'mx-4 primary': $vuetify.breakpoint.smAndDown,
-                'mr-4 primary': $vuetify.breakpoint.mdAndUp
+                'mr-4 primary': $vuetify.breakpoint.mdAndUp,
               }"
             >
               <v-card-title class="d-flex justify-space-between">
@@ -356,7 +356,7 @@ export default {
     Content: AppContent,
     Processes: AppProcesses,
     Logs: AppLogs,
-    Stats: AppStats
+    Stats: AppStats,
   },
   data() {
     return {
@@ -368,27 +368,30 @@ export default {
         cpu_percent: [],
         mem_percent: [],
         mem_current: [],
-        mem_total: []
+        mem_total: [],
       },
       connection: null,
-      statConnection: null
+      statConnection: null,
     };
   },
   computed: {
     ...mapState("apps", ["apps", "app", "isLoading", "processes"]),
     ...mapGetters({
-      getAppByName: "apps/getAppByName"
+      getAppByName: "apps/getAppByName",
     }),
     app() {
       const appName = this.$route.params.appName;
       return this.getAppByName(appName);
+    },
+    baseUrlName() {
+      return baseUrlName;
     }
   },
   methods: {
     ...mapActions({
       readApp: "apps/readApp",
       readAppProcesses: "apps/readAppProcesses",
-      AppAction: "apps/AppAction"
+      AppAction: "apps/AppAction",
     }),
     editClick(appName) {
       this.$router.push({ path: `/apps/edit/${appName.Name}` });
@@ -407,13 +410,13 @@ export default {
     },
     readAppLogs(appName) {
       this.logConnection = new EventSource(`${baseUrlName}/api/apps/${appName}/logs`);
-      this.logConnection.addEventListener("update", event => {
+      this.logConnection.addEventListener("update", (event) => {
         this.logs.push(event.data);
       });
     },
     readAppStats(appName) {
       this.statConnection = new EventSource(`${baseUrlName}/api/apps/${appName}/stats`);
-      this.statConnection.addEventListener("update", event => {
+      this.statConnection.addEventListener("update", (event) => {
         let statsGroup = JSON.parse(event.data);
         this.stats.time.push(statsGroup.time);
         this.stats.cpu_percent.push(Math.round(statsGroup.cpu_percent));
@@ -438,9 +441,9 @@ export default {
         cpu_percent: [],
         mem_percent: [],
         mem_current: [],
-        mem_total: []
+        mem_total: [],
       };
-    }
+    },
   },
   created() {
     const appName = this.$route.params.appName;
@@ -457,7 +460,7 @@ export default {
   beforeDestroy() {
     this.closeLogs();
     this.closeStats();
-  }
+  },
 };
 </script>
 

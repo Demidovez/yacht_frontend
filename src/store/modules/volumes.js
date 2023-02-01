@@ -1,5 +1,6 @@
 import axios from "axios";
 import router from "@/router/index";
+import { baseUrlName } from "../../config";
 
 const state = {
   volumes: [],

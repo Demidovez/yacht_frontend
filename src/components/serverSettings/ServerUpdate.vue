@@ -20,6 +20,14 @@
     <v-btn
       class="mx-5 mb-5"
       color="primary"
+      @click="checkUpdate()"
+      :disabled="checkedUpdate"
+      >
+      Check For Updates
+    </v-btn>
+    <v-btn
+      class="mx-5 mb-5"
+      color="primary"
       @click="update()"
       :disabled="!updatable"
     >
@@ -37,11 +45,9 @@ export default {
     return {
       containerDialog: false,
       isLoading: false,
+      checkedUpdate: false,
       updatable: false
     };
-  },
-  mounted() {
-    this.checkUpdate();
   },
   methods: {
     ...mapMutations({
@@ -55,6 +61,7 @@ export default {
       logout: "auth/AUTH_LOGOUT"
     }),
     checkUpdate() {
+      this.checkedUpdate = true
       this.isLoading = true;
       axios({
         url: baseUrlName + "/api/settings/check/update",
@@ -63,6 +70,9 @@ export default {
       })
         .then(response => {
           this.isLoading = false;
+          if (response.data == false){
+            this.setErr("No update found.")
+          }
           this.updatable = response.data;
         })
         .catch(err => {

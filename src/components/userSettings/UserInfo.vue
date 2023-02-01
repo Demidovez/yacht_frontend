@@ -171,7 +171,7 @@ export default {
     revoke_api_key(key) {
       this.isLoading = true;
       axios
-        .get(`${baseUrlName}/api/auth/api/keys/${key.id}`)
+      .get(`${baseUrlName}/api/auth/api/keys/${key.id}`)
         .then(() => {
           let idx = this.apiKeys.findIndex(x => x.id === key.id);
           this.apiKeys.splice(idx, 1);
